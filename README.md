@@ -137,6 +137,28 @@ Generates an optimized, tree-shaken static bundle in the `dist/` directory.
 
 ---
 
+## ⚡ Deploying to Vercel
+
+This repository includes `vercel.json` to handle client-side routing rewrites (`/login`, `/admin/users`, `/accept-invitation`, etc.) without 404 errors.
+
+### 1. Import Repository into Vercel
+1. Go to [vercel.com/new](https://vercel.com/new) and connect your GitHub repository **`Nashid-k/ERP_FRONTEND`**.
+2. Framework Preset: **Vite** (auto-detected).
+3. Root Directory: `./` (or leave default).
+4. Build Command: `npm run build`
+5. Output Directory: `dist`
+
+### 2. Add Environment Variables in Vercel
+In the Vercel project configuration page (or under **Settings** → **Environment Variables**), add:
+
+| Variable Name | Example Production Value | Purpose |
+|---|---|---|
+| `VITE_API_URL` | `https://your-backend-service.onrender.com/api` | Connects the React client to your deployed Express backend on Render |
+
+> 💡 **Tip:** Once your Render backend is deployed, copy its URL (e.g. `https://erp-backend.onrender.com/api`) and paste it into `VITE_API_URL` in Vercel, then click **Redeploy**.
+
+---
+
 ## 🔒 Security Measures
 
 1. **Zero Secret Storage**: No credentials, API secrets, or private keys exist in the client repository or bundle.
