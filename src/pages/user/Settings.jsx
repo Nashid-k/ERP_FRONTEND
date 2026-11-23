@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { userService } from '../../services/userService';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
-import { KeyRound, Shield, Eye, EyeOff, Lock, CheckCircle2 } from 'lucide-react';
+import { KeyRound, Shield, Eye, EyeOff } from 'lucide-react';
 
 export const Settings = () => {
   const { user } = useAuth();

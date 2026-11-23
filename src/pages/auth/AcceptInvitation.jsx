@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { authService } from '../../services/authService';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
-import { Lock, CheckCircle2, AlertCircle, Eye, EyeOff, Shield, ArrowRight } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Eye, EyeOff, Shield, ArrowRight } from 'lucide-react';
 
 export const AcceptInvitation = () => {
   const [searchParams] = useSearchParams();

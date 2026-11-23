@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { authService } from '../../services/authService';
 import { useToast } from '../../context/ToastContext';
-import { Lock, Eye, EyeOff, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Eye, EyeOff, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 export const ResetPassword = () => {
   const [searchParams] = useSearchParams();

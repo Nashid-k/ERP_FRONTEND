@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle2, Clock, Ban, Trash2 } from 'lucide-react';
+import { CheckCircle2, Clock, Ban } from 'lucide-react';
 
 export const StatusBadge = ({ status }) => {
   switch (status) {

@@ -44,8 +44,8 @@ export const authService = {
   logout: async () => {
     try {
       await api.post('/auth/logout');
-    } catch (e) {
-      // Ignore logout request errors
+    } catch {
+      // Ignore logout network errors; local token wipe takes precedence
     } finally {
       localStorage.removeItem('erp_token');
       localStorage.removeItem('erp_user');

@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { RoleBadge } from '../../components/RoleBadge';
 import { StatusBadge } from '../../components/StatusBadge';
-import { User, Lock, Mail, Building, Phone, Save, CheckCircle2 } from 'lucide-react';
+import { Lock, Save, CheckCircle2 } from 'lucide-react';
 
 export const Profile = () => {
   const { user, updateUserContext } = useAuth();

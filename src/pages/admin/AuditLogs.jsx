@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { adminService } from '../../services/adminService';
 import { useToast } from '../../context/ToastContext';
-import { History, Search, Filter, Shield, Clock, Terminal } from 'lucide-react';
+import { History, Filter } from 'lucide-react';
 
 export const AuditLogs = () => {
   const [logs, setLogs] = useState([]);
@@ -11,7 +11,7 @@ export const AuditLogs = () => {
 
   const toast = useToast();
 
-  const fetchLogs = async () => {
+  const fetchLogs = React.useCallback(async () => {
     setIsLoading(true);
     try {
       const data = await adminService.getAuditLogs({
@@ -29,17 +29,19 @@ export const AuditLogs = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [actionFilter, pagination.page, pagination.limit, toast]);
 
   useEffect(() => {
     fetchLogs();
-  }, [actionFilter, pagination.page]);
+  }, [fetchLogs]);
 
   const actionsList = [
     'ALL',
     'USER_CREATED',
     'USER_UPDATED',
     'USER_STATUS_CHANGED',
+    'USER_BLOCKED',
+    'USER_UNBLOCKED',
     'USER_DELETED',
     'USER_RESTORED',
     'INVITATION_SENT',
@@ -49,7 +51,8 @@ export const AuditLogs = () => {
     'USER_LOGIN',
     'USER_LOGOUT',
     'PASSWORD_CHANGED',
-    'PASSWORD_RESET_COMPLETED'
+    'PASSWORD_RESET_COMPLETED',
+    'SECURITY_ALERT_EMAIL_MISMATCH'
   ];
 
   return (

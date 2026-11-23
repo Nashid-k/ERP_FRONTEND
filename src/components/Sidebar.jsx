@@ -8,7 +8,6 @@ import {
   User,
   KeyRound,
   X,
-  Building,
   MapPin
 } from 'lucide-react';
 

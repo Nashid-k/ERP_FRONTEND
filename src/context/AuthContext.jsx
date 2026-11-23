@@ -36,7 +36,10 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (err) {
       console.warn('Session verification failed:', err.message);
-      logout();
+      localStorage.removeItem('erp_token');
+      localStorage.removeItem('erp_user');
+      setUser(null);
+      setToken(null);
     } finally {
       setLoading(false);
     }

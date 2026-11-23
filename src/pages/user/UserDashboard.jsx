@@ -4,13 +4,10 @@ import { RoleBadge } from '../../components/RoleBadge';
 import { StatusBadge } from '../../components/StatusBadge';
 import {
   User,
-  Shield,
   KeyRound,
   CheckCircle2,
   Calendar,
   Building2,
-  Phone,
-  Mail,
   ArrowRight,
   Info
 } from 'lucide-react';

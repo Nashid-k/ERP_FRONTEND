@@ -12,26 +12,19 @@ import {
   Search,
   Plus,
   Filter,
-  MoreVertical,
   CheckCircle2,
   Ban,
-  Trash2,
   RotateCcw,
-  Mail,
   Edit,
   Eye,
   Copy,
   Check,
-  Building,
-  Phone,
-  Shield,
-  Clock,
   Send,
   ExternalLink
 } from 'lucide-react';
 
 export const UserManagement = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const initialStatus = searchParams.get('status') || 'ALL';
   const actionParam = searchParams.get('action');
 

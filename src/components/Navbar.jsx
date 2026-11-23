@@ -2,7 +2,7 @@ import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { RoleBadge } from './RoleBadge';
 import { StatusBadge } from './StatusBadge';
-import { LogOut, Menu, Building2, MapPin } from 'lucide-react';
+import { LogOut, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export const Navbar = ({ onToggleSidebar }) => {

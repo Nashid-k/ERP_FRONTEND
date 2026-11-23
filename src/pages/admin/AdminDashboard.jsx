@@ -6,12 +6,11 @@ import {
   UserCheck,
   UserX,
   Mail,
-  Trash2,
+  Ban,
   ShieldCheck,
   Activity,
   PlusCircle,
   ArrowRight,
-  TrendingUp,
   RefreshCw
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -29,7 +28,7 @@ export const AdminDashboard = () => {
   const [recentLogs, setRecentLogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchData = async () => {
+  const fetchData = React.useCallback(async () => {
     setIsLoading(true);
     try {
       const [statsRes, logsRes] = await Promise.all([
@@ -44,15 +43,15 @@ export const AdminDashboard = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const statCards = [
     {
-      title: 'Total Non-Deleted Users',
+      title: 'Total Directory Users',
       value: stats.total,
       icon: Users,
       color: 'bg-blue-500/10 text-blue-600',
