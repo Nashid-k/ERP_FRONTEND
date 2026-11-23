@@ -11,6 +11,7 @@ export const AcceptInvitation = () => {
   const emailParam = searchParams.get('email') || '';
 
   const [email, setEmail] = useState(emailParam);
+  const [maskedEmailHint, setMaskedEmailHint] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -38,9 +39,10 @@ export const AcceptInvitation = () => {
         const res = await authService.verifyEmail(token, emailParam);
         if (res.success) {
           setTokenValid(true);
-          if (res.exactEmail) {
-            setEmail(res.exactEmail);
-          } else if (res.email && !email) {
+          if (res.maskedEmail) {
+            setMaskedEmailHint(res.maskedEmail);
+          }
+          if (res.isEmailConfirmed && res.email) {
             setEmail(res.email);
           }
           if (res.name) setName(res.name);
@@ -179,7 +181,7 @@ export const AcceptInvitation = () => {
                     </span>
                   ) : (
                     <span className="text-[11px] text-amber-600 flex items-center gap-1 font-medium">
-                      <Shield className="w-3.5 h-3.5" /> For security, please enter the corporate email address that received the invitation
+                      <Shield className="w-3.5 h-3.5" /> Security check: Enter the corporate email that received the invitation{maskedEmailHint ? ` (hint: ${maskedEmailHint})` : ''}
                     </span>
                   )}
                 </div>
