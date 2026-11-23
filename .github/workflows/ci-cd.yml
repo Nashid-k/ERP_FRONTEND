@@ -1,0 +1,102 @@
+name: Frontend CI and CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: frontend-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Lint and build frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build production bundle
+        run: npm run build
+
+  deploy:
+    name: Deploy frontend to Vercel
+    runs-on: ubuntu-latest
+    needs: ci
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'pull_request'
+    environment:
+      name: ${{ github.event_name == 'push' && 'production' || 'preview' }}
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - name: Check Vercel deployment secrets
+        id: deploy_guard
+        run: |
+          if [ -z "$VERCEL_TOKEN" ] || [ -z "$VERCEL_ORG_ID" ] || [ -z "$VERCEL_PROJECT_ID" ]; then
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Vercel secrets are incomplete; skipping Vercel deployment."
+          else
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout
+        if: steps.deploy_guard.outputs.enabled == 'true'
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        if: steps.deploy_guard.outputs.enabled == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Link Vercel project
+        if: steps.deploy_guard.outputs.enabled == 'true'
+        run: |
+          mkdir -p .vercel
+          printf '{"orgId":"%s","projectId":"%s"}' "$VERCEL_ORG_ID" "$VERCEL_PROJECT_ID" > .vercel/project.json
+
+      - name: Pull Vercel environment
+        if: steps.deploy_guard.outputs.enabled == 'true'
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            npx --yes vercel@latest pull --yes --environment=production --token="$VERCEL_TOKEN"
+          else
+            npx --yes vercel@latest pull --yes --environment=preview --token="$VERCEL_TOKEN"
+          fi
+
+      - name: Build Vercel artifact
+        if: steps.deploy_guard.outputs.enabled == 'true'
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            npx --yes vercel@latest build --prod --token="$VERCEL_TOKEN"
+          else
+            npx --yes vercel@latest build --token="$VERCEL_TOKEN"
+          fi
+
+      - name: Deploy prebuilt artifact
+        if: steps.deploy_guard.outputs.enabled == 'true'
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            npx --yes vercel@latest deploy --prebuilt --prod --token="$VERCEL_TOKEN"
+          else
+            npx --yes vercel@latest deploy --prebuilt --token="$VERCEL_TOKEN"
+          fi
